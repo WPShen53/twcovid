@@ -8,7 +8,7 @@ df.set_index('date', inplace=True)
 
 # fillin the number of previous day, if no correction -- forward fill
 df = df.ffill(axis=1)
-df.plot(stacked=False)
+df.plot(stacked=False, legend=False)
 plt.show()
 
 # calculate the correction amount and sum to check against the accounced the daily correction number
