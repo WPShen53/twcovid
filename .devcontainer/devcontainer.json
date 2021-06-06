@@ -36,8 +36,8 @@
 	"forwardPorts": [27017],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "pip3 install --user -r requirements.txt && git config --global user.name 'WPShen53' && git config --global user.email wpshen@yahoo.com",
+	"postCreateCommand": "pip install --upgrade pip && pip install -r requirements.txt && git config --global user.name 'WPShen53' && git config --global user.email wpshen@yahoo.com",
 
 	// Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
-	"remoteUser": "vscode"
+	// "remoteUser": "vscode"
 }
