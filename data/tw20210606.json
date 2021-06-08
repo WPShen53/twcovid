@@ -1,11 +1,11 @@
 {
     "date": "2021-06-06",
-    "daily confirm": "335",
-    "dead": "8",
-    "correct amount": 36,
-    "correction" : {
-        "2021-06-04": "345",
-        "2021-06-03": "416",
-        "2021-05-31": "395"
-    }
+    "cases": 335,
+    "dead": 36,
+    "amtCorrected": 8,
+    "corrections" : [
+        {"date": "2021-06-04", "cases": 345},
+        {"date": "2021-06-03", "cases": 416},
+        {"date": "2021-05-31", "cases": 395}
+    ]
 }
