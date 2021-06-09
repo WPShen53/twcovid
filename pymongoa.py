@@ -15,11 +15,12 @@ col_da = coviddb["daily.announcement"]
 pprint.pprint(col_da.find_one())
 
 ## Insert document from json files
-# directory = "./data/"
-# for filename in os.listdir(directory):
-#     print(filename)
-#     with open(directory+filename) as f: file_data = json.load(f)
-#     col_da.insert_one(file_data)
+directory = "./data/"
+for filename in os.listdir(directory):
+    print(filename)
+    with open(directory+filename) as f: file_data = json.load(f)
+    if isinstance(file_data, dict): col_da.insert_one(file_data)
+    else : col_da.insert_many(file_data)
 
 ## Delete documents
 # col_da.delete_one({"date":"2020-01-01"})
@@ -29,7 +30,6 @@ death = {}
 days = []
 records = col_da.find({"dead":{"$exists":True}}, {"_id":0, "date":1, "dead":1}).sort("date", -1)
 for x in records: 
-    days.append(x["date"])
     death[x["date"]]=x["dead"]
 pprint.pprint(death)
 df_death = pd.DataFrame.from_dict(death, orient="index")
@@ -39,8 +39,9 @@ df_death.plot.barh()
 
 ## Find Min/Max of a date
 dailyAmt = {}
-for searchDate in days:
+for x in col_da.find({}):
     val = []
+    searchDate = x["date"]
     init_val = col_da.find_one({"date": searchDate},{"_id":0,"cases":1})
     if (init_val != None):
         val.append(int(init_val["cases"]))
