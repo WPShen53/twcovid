@@ -15,6 +15,7 @@ col_da = coviddb["daily.announcement"]
 pprint.pprint(col_da.find_one())
 
 ## Insert document from json files
+col_da.delete_many({})
 directory = "./data/"
 for filename in os.listdir(directory):
     print(filename)
@@ -33,9 +34,10 @@ for x in records:
     death[x["date"]]=x["dead"]
 pprint.pprint(death)
 df_death = pd.DataFrame.from_dict(death, orient="index")
-# df_death.index = pd.to_datetime(df_death.index)
+df_death.index = pd.to_datetime(df_death.index)
 df_death.rename(columns={0:"dead"}, inplace=True)
-df_death.plot.barh()
+df_death.plot()
+# df_death.plot.barh()
 
 ## Find Min/Max of a date
 dailyAmt = {}
