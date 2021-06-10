@@ -1,8 +1,7 @@
 import pandas as pd
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt, seaborn as sns
 import pymongo
-import json, os
-import pprint
+import json, os, pprint
 
 dbclient = pymongo.MongoClient("mongodb://localhost:27017")
 print(dbclient.list_database_names())
@@ -38,6 +37,7 @@ df_death.index = pd.to_datetime(df_death.index)
 df_death.rename(columns={0:"dead"}, inplace=True)
 df_death.plot()
 # df_death.plot.barh()
+plt.show()
 
 ## Find Min/Max of a date
 dailyAmt = {}
@@ -51,10 +51,13 @@ for x in col_da.find({}):
     for _i, x in enumerate(records):
         val.append(int(x["corrections"][0]["cases"]))
     dailyAmt[searchDate] = {"Min":min(val), "Max":max(val)}
-pprint.pprint(dailyAmt)
+# pprint.pprint(dailyAmt)
 df_daily = pd.DataFrame.from_dict(dailyAmt, orient="index")
 df_daily["7d Rolling"] = df_daily["Max"].rolling(7).mean()
+df_daily.index = pd.to_datetime(df_daily.index)
 pprint.pprint(df_daily)
+
+sns.set(rc={"figure.figsize":(11, 5)})
 ax = df_daily.plot(stacked=False)
 plt.show()
 
