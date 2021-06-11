@@ -62,3 +62,63 @@ ax = df_daily.plot(stacked=False)
 plt.show()
 
 dbclient.close()
+
+
+## Using Autocorrelation and ARIMA parameters for forecast
+from pandas.plotting import autocorrelation_plot
+from statsmodels.tsa.arima.model import ARIMA
+
+series = df_daily["7d Rolling"]
+series.dropna(inplace=True)
+
+# use autocorrelation to fine the legs of time series
+autocorrelation_plot(series)
+plt.show()
+model=ARIMA(series.asfreq('d'),order=(5,1,0))
+model_fit=model.fit()
+# summary of fit model
+# print(model_fit.summary())
+# line plot of residuals
+residuals = pd.DataFrame(model_fit.resid)
+ax = residuals.plot()
+ax.grid('on', which='major', axis='y' )
+plt.show()
+# density plot of residuals, check if is center around 0
+ax = residuals.plot(kind='kde')
+ax.grid('on', which='major', axis='x' )
+plt.show()
+# summary stats of residuals
+print(residuals.describe())
+# forecast
+series.append(model_fit.predict(start="2021-06-12",end="2021-06-15",dynamic=True))
+series.plot()
+plt.show()
+
+
+from sklearn.metrics import mean_squared_error
+from math import sqrt
+# split into train and test sets
+X = series.values
+size = int(len(X) * 0.66)
+train, test = X[0:size], X[size:len(X)]
+history = [x for x in train]
+predictions = list()
+# walk-forward validation
+for t in range(len(test)):
+	model = ARIMA(history, order=(5,1,0))
+	model_fit = model.fit()
+	output = model_fit.forecast()
+	yhat = output[0]
+	predictions.append(yhat)
+	obs = test[t]
+	history.append(obs)
+	print('predicted=%f, expected=%f' % (yhat, obs))
+# evaluate forecasts
+rmse = sqrt(mean_squared_error(test, predictions))
+print('Test RMSE: %.3f' % rmse)
+# plot forecasts against actual outcomes
+plt.plot(test, label= "expected")
+plt.plot(predictions, '--r' , label="predicted")
+plt.legend(framealpha=1, frameon=True)
+plt.show()
+

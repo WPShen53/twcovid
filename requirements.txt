@@ -3,3 +3,5 @@ pandas
 matplotlib
 seaborn
 pymongo
+sklearn
+statsmodels
