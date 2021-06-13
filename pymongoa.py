@@ -1,5 +1,7 @@
 import pandas as pd
-import matplotlib.pyplot as plt, seaborn as sns
+import matplotlib.pyplot as plt, matplotlib.dates as mdates
+import seaborn as sns
+from statsmodels.tsa.arima.model import ARIMA
 import pymongo
 import json, os, pprint
 
@@ -65,19 +67,17 @@ dbclient.close()
 
 
 ## Using Autocorrelation and ARIMA parameters for forecast
-from pandas.plotting import autocorrelation_plot
-from statsmodels.tsa.arima.model import ARIMA
-
 series = df_daily["7d Rolling"]
 series.dropna(inplace=True)
 
 # use autocorrelation to fine the legs of time series
-autocorrelation_plot(series)
+pd.plotting.autocorrelation_plot(series)
 plt.show()
 model=ARIMA(series.asfreq('d'),order=(5,1,0))
 model_fit=model.fit()
 # summary of fit model
 # print(model_fit.summary())
+
 # line plot of residuals
 residuals = pd.DataFrame(model_fit.resid)
 ax = residuals.plot()
@@ -89,9 +89,19 @@ ax.grid('on', which='major', axis='x' )
 plt.show()
 # summary stats of residuals
 print(residuals.describe())
+
 # forecast
-series.append(model_fit.predict(start="2021-06-12",end="2021-06-15",dynamic=True))
-series.plot()
+fct = model_fit.predict(start="2021-06-13",end="2021-06-20",dynamic=True)
+fig, ax = plt.subplots(constrained_layout=True)
+locator = mdates.AutoDateLocator()
+formatter = mdates.ConciseDateFormatter(locator)
+ax.xaxis.set_major_locator(locator)
+ax.xaxis.set_major_formatter(formatter)
+ax.plot(series, label= '7d rolling average')
+ax.plot(fct, '--r' , label="forecast")
+plt.xlabel("date")
+plt.ylabel("positive cases")
+plt.legend(framealpha=1, frameon=True)
 plt.show()
 
 
