@@ -1,9 +1,17 @@
 import pandas as pd
 import matplotlib.pyplot as plt, matplotlib.dates as mdates
 import seaborn as sns
-from statsmodels.tsa.arima.model import ARIMA
 import pymongo
 import json, os, pprint
+from sklearn.metrics import mean_squared_error
+from math import sqrt
+from statsmodels.tsa.arima.model import ARIMA
+from datetime import datetime, timedelta
+
+sns.set(rc={"figure.figsize":(11, 5)})
+locator = mdates.AutoDateLocator()
+formatter = mdates.ConciseDateFormatter(locator)
+
 
 dbclient = pymongo.MongoClient("mongodb://localhost:27017")
 print(dbclient.list_database_names())
@@ -58,8 +66,6 @@ df_daily = pd.DataFrame.from_dict(dailyAmt, orient="index")
 df_daily["7d Rolling"] = df_daily["Max"].rolling(7).mean()
 df_daily.index = pd.to_datetime(df_daily.index)
 pprint.pprint(df_daily)
-
-sns.set(rc={"figure.figsize":(11, 5)})
 ax = df_daily.plot(stacked=False)
 plt.show()
 
@@ -70,10 +76,12 @@ dbclient.close()
 series = df_daily["7d Rolling"]
 series.dropna(inplace=True)
 
-# use autocorrelation to fine the legs of time series
+# use autocorrelation to find the legs of time series
 pd.plotting.autocorrelation_plot(series)
 plt.show()
-model=ARIMA(series.asfreq('d'),order=(5,1,0))
+lag = 5
+
+model=ARIMA(series.asfreq('d'),order=(lag,1,0))
 model_fit=model.fit()
 # summary of fit model
 # print(model_fit.summary())
@@ -88,47 +96,28 @@ ax = residuals.plot(kind='kde')
 ax.grid('on', which='major', axis='x' )
 plt.show()
 # summary stats of residuals
+print('\n<== Residual Description ==>')
 print(residuals.describe())
 
-# forecast
-fct = model_fit.predict(start="2021-06-13",end="2021-06-20",dynamic=True)
+# forecast with the single ARIMA model, fit(5,1,0)
+fct = {}
+fct_range = series.tail(n=10).index
+for sdate in fct_range:
+    fct[sdate] = model_fit.predict(start=sdate,end=sdate+timedelta(days=1),dynamic=True)[0]
+fcts = pd.Series(fct)
+# evaluate forecasts
+rmse = sqrt(mean_squared_error(series.tail(n=10), fcts))
+print('\n<== Model Validation ==> RMSE: %.3f' % rmse)
+
+## Plot chat
 fig, ax = plt.subplots(constrained_layout=True)
-locator = mdates.AutoDateLocator()
-formatter = mdates.ConciseDateFormatter(locator)
 ax.xaxis.set_major_locator(locator)
 ax.xaxis.set_major_formatter(formatter)
 ax.plot(series, label= '7d rolling average')
-ax.plot(fct, '--r' , label="forecast")
+ax.plot(fcts, 'r' , label="validation")
+pred = model_fit.predict(start=sdate,end=sdate+timedelta(days=lag),dynamic=True)
+ax.plot(pred, '--r' , label=sdate.strftime("%x")+" prediction")
 plt.xlabel("date")
 plt.ylabel("positive cases")
 plt.legend(framealpha=1, frameon=True)
 plt.show()
-
-
-from sklearn.metrics import mean_squared_error
-from math import sqrt
-# split into train and test sets
-X = series.values
-size = int(len(X) * 0.66)
-train, test = X[0:size], X[size:len(X)]
-history = [x for x in train]
-predictions = list()
-# walk-forward validation
-for t in range(len(test)):
-	model = ARIMA(history, order=(5,1,0))
-	model_fit = model.fit()
-	output = model_fit.forecast()
-	yhat = output[0]
-	predictions.append(yhat)
-	obs = test[t]
-	history.append(obs)
-	print('predicted=%f, expected=%f' % (yhat, obs))
-# evaluate forecasts
-rmse = sqrt(mean_squared_error(test, predictions))
-print('Test RMSE: %.3f' % rmse)
-# plot forecasts against actual outcomes
-plt.plot(test, label= "expected")
-plt.plot(predictions, '--r' , label="predicted")
-plt.legend(framealpha=1, frameon=True)
-plt.show()
-
