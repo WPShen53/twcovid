@@ -22,13 +22,11 @@ for db in dbclient.list_databases(): pprint.pprint(db)
 coviddb = dbclient["tw_covid"]
 for col in coviddb.list_collections(): pprint.pprint(col)
 col_da = coviddb["daily.announcement"]
-# pprint.pprint(col_da.find_one())
 
 ## Insert document from json files
 col_da.delete_many({})
 directory = "./data/"
 for filename in os.listdir(directory):
-#     print(filename)
     with open(directory+filename) as f: file_data = json.load(f)
     if isinstance(file_data, dict): col_da.insert_one(file_data)
     else : col_da.insert_many(file_data)
@@ -42,13 +40,11 @@ days = []
 records = col_da.find({"dead":{"$exists":True}}, {"_id":0, "date":1, "dead":1}).sort("date", 1)
 for x in records: 
     death[x["date"]]=int(x["dead"])
-# pprint.pprint(death)
 df_death = pd.DataFrame.from_dict(death, orient="index")
 df_death.index = pd.to_datetime(df_death.index)
 df_death.rename(columns={0:"dead"}, inplace=True)
 ax = df_death.plot()
 xDateFormater(ax)
-# df_death.plot.barh()
 plt.show()
 
 ## Find the Original(Min) and Corrected(Max) case number of a date
@@ -65,15 +61,22 @@ for x in col_da.find({}):
     dailyAmt[searchDate] = {"Original":min(val), "Corrected":max(val), "Updates":len(val)}
 df_daily = pd.DataFrame.from_dict(dailyAmt, orient="index")
 df_daily.index = pd.to_datetime(df_daily.index)
+df_daily.index.rename('date', inplace=True)
 df_daily["7d Rolling"] = df_daily["Corrected"].rolling(7).mean()
 df_daily["dead"] = df_death
+
+df_daily.to_csv("dailyDF.csv")
+dbclient.close()
+
+## if there is no MongoDB for the data, load the dataframe from csv
+# df_daily = pd.read_csv("dailyDF.csv", index_col="date")
+# df_daily.index = pd.to_datetime(df_daily.index)
 pprint.pprint(df_daily)
 ax = df_daily[["Original","Corrected","7d Rolling"]].plot(stacked=False)
 plt.show()
 
-dbclient.close()
 
-
+## Modeling and Forecasting
 ## Using Autocorrelation and ARIMA parameters for forecast
 series = df_daily["7d Rolling"]
 series.dropna(inplace=True)

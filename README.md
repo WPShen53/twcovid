@@ -10,7 +10,7 @@ To use the repository
 5. Wait the scripts to build the two containers and setup the connection
 6. Open "pymongoa.py" to run (recommend to run in Interactive Window, so the plots can display properly).
 
-The data was extracted daily from the TW CDC website (2021/05/09 ~ 2021/06/12) and stored in Json files, with the following details 
+The data was extracted daily from the TW CDC website (2021/05/09 ~ 2021/06/18) and stored in Json files, with the following details 
 - date
 - confirmed positive case number
 - death toll (if any)
