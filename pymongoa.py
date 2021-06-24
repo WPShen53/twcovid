@@ -68,7 +68,7 @@ for x in documents.find({}):
 df_daily = pd.DataFrame.from_dict(daily_amt, orient="index")
 df_daily.index = pd.to_datetime(df_daily.index)
 df_daily.index.rename('date', inplace=True)
-df_daily["7d Rolling"] = df_daily["Corrected"].rolling(7).mean()
+df_daily["7d Rolling"] = df_daily["Corrected"].rolling(7, center=True).mean()
 df_daily["dead"] = df_death
 
 df_daily.to_csv("dailyDF.csv")

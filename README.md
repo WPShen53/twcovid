@@ -10,7 +10,7 @@ To use the repository
 5. Wait the scripts to build the two containers and setup the connection
 6. Open "pymongoa.py" to run (recommend to run in Interactive Window, so the plots can display properly).
 
-The data was extracted daily from the TW CDC website (2021/05/09 ~ 2021/06/23) and stored in Json files, with the following details 
+The data was extracted daily from the TW CDC website (2021/05/09 ~ 2021/06/24) and stored in Json files, with the following details 
 - date
 - confirmed positive case number
 - death toll (if any)
@@ -19,12 +19,17 @@ The data was extracted daily from the TW CDC website (2021/05/09 ~ 2021/06/23) a
     - date
     - updated case number
 
-Example, model validation and forecast
-![sum chart](sumChart.png) 
+Daily Positive Case Chart
+![case chart](positiveCase.png) 
 
 The document-based MongoDB is well suited to store and serve as the DB for this type of daily announcements. The item and content in the announcements can vary from day to day. Without predefined schema and can adjust dynamically provides a huge advantage for dynamic analysis. The use of pymongo library is simple enough. The combination is very handy for adhoc analysis, even machine learning.
 
 The use of vscode "Remote Development" saves a lot of time to setup environments. With everything containerized, remote development should be the way to go.
+
+A simple ARIMA model got fit to the "7 Days Rolloing Avg" of the corrected daily case number. No data split for testing (since this is just a quick example). 7 days forecast are calcualte from the model and put on the same chart. 
+
+Example, model validation and forecast
+![sum chart](sumChart.png) 
 
 [6/24/2021] Two additional containers were used to execute the code quality scan
 1. $ docker run -d --name sonarqube \
