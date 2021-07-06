@@ -1,4 +1,4 @@
-import tcdata, tcplot
+import tcdata, tcplot, tcmodel
 import pprint
 
 tcdata.refresh_data_from_json()
@@ -8,4 +8,9 @@ pprint.pprint(df)
 fig = tcplot.plot_confirm_case(df)
 fig.show()
 
+series = df['7d Rolling']
+model, model_fit = tcmodel.fit_model(series)
+print(model_fit.summary())
 
+fig = tcplot.plot_model_prediction(series, model_fit)
+fig.show()
