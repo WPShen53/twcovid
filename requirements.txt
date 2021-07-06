@@ -5,3 +5,5 @@ seaborn
 pymongo
 sklearn
 statsmodels
+dash
+nbformat

@@ -111,7 +111,7 @@ print(residuals.describe())
 
 # forecast with the single ARIMA model, fit(8,1,0)
 fct = {}
-validate_period = 15
+validate_period = lag * 2
 fct_range = series.tail(n=validate_period).index
 for sdate in fct_range:
     fct[sdate] = model_fit.predict(start=sdate,end=sdate+timedelta(days=1),dynamic=True)[0]
@@ -125,6 +125,9 @@ fig, ax = plt.subplots(constrained_layout=True)
 date_formater(ax)
 ax.plot(series, label= '7d rolling average')
 ax.plot(fcts, 'r' , label="validation")
+# for sdate in fct_range:
+#     pred = model_fit.predict(start=sdate,end=sdate+timedelta(days=lag),dynamic=True)
+#     ax.plot(pred, '--r' , label=sdate.strftime("%x")+" prediction")
 pred = model_fit.predict(start=sdate,end=sdate+timedelta(days=lag),dynamic=True)
 ax.plot(pred, '--r' , label=sdate.strftime("%x")+" prediction")
 plt.xlabel("date")
