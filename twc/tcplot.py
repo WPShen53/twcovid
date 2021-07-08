@@ -15,6 +15,9 @@ def plot_death_case (df):
 def plot_df (df, labels=[]):
     if (len(labels)==0): labels = df.columns
     fig = px.line(df, y=labels)
+    fig.update_layout(title='TW Covid-19 CDC Daily Announcement',
+                   xaxis_title='Date',
+                   yaxis_title='Daily Positive Cases')
     return fig
 
 def plot_model_prediction (series, model_fit, lag=8):

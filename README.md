@@ -43,3 +43,6 @@ Example, model validation and forecast
     sonarsource/sonar-scanner-cli
 
 After the installation and start of sonarqube server, follow the instruction to create twcovid project and login credential. Update the SONAR_LOGIN credential and edit the content of sonar-project.properties if needed. Start the sonar-scanner container to execute the code quality scan. Access the report on sonarqube server under project twcovid.
+
+[7/8/2021] Use Dash opensource package to create a Web App
+Leverage the plotly Dash framework, the app.py was added as the entry point of a Web App. The python programs were also packaged under "twc" and split into three function modules, i.e. tcdata, tcmodel, and tcplot. This is a more production like coding style.

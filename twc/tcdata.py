@@ -10,10 +10,10 @@ def get_docs():
     documents = covid_db["daily.announcement"]
     return documents
 
-def refresh_data_from_json():
+def refresh_data_from_json(dir = '../data/'):
     docs = get_docs()
     delete_all_docs(docs)
-    insert_json_from_dir(docs = docs) 
+    insert_json_from_dir(dir=dir, docs=docs) 
 
 def delete_all_docs(docs = get_docs()):
     docs.delete_many({})
