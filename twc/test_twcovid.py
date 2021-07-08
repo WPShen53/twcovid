@@ -9,7 +9,7 @@ fig = tcplot.plot_confirm_case(df)
 fig.show()
 
 series = df['7d Rolling']
-model, model_fit = tcmodel.fit_model(series)
+model_fit = tcmodel.fit_ARIMA_model(series)
 print(model_fit.summary())
 
 fig = tcplot.plot_model_prediction(series, model_fit)

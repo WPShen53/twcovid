@@ -88,7 +88,7 @@ def refresh_data_update_model_chart (n_clicks, options):
     df = tcdata.get_twcovid_df_from_db()
     data = format_df(df)
     series = df['7d Rolling']
-    _model, model_fit = tcmodel.fit_model(series)
+    model_fit = tcmodel.fit_ARIMA_model(series)
     fig1 = tcplot.plot_model_prediction(series, model_fit) 
     fig2 = tcplot.plot_df(df, options)   
     return fig1, fig2, msg, data
