@@ -1,5 +1,6 @@
 import plotly.express as px
 import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 import pandas as pd
 from datetime import timedelta
 
@@ -13,10 +14,15 @@ def plot_death_case (df):
 
 def plot_df (df, labels=[]):
     if (len(labels)==0): labels = df.columns
-    fig = px.line(df, y=labels)
-    fig.update_layout(title='TW Covid-19 CDC Daily Announcement',
-                   xaxis_title='Date',
-                   yaxis_title='Daily Positive Cases')
+    fig = make_subplots(specs=[[{"secondary_y": True}]])
+    for label in labels:
+        if label == "dead":
+            fig.add_trace(go.Scatter(x=df.index, y=df[label], mode='lines', name=label), secondary_y=True)
+            fig.update_yaxes(title_text='Daily Death Cases',secondary_y=True)
+        else:
+            fig.add_trace(go.Scatter(x=df.index, y=df[label], mode='lines', name=label), secondary_y=False)
+    fig.update_layout(title='TW Covid-19 CDC Daily Announcement', xaxis_title='Date')
+    fig.update_yaxes(title_text='Daily Positive Cases',secondary_y=False)
     return fig
 
 def plot_model_prediction (series, model_fit, lag=8):
