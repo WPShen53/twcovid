@@ -71,11 +71,11 @@ df_daily.index.rename('date', inplace=True)
 df_daily["7d Rolling"] = df_daily["Corrected"].rolling(7, center=True).mean()
 df_daily["dead"] = df_death
 
-df_daily.to_csv("dailyDF.csv")
+df_daily.to_csv("./twc/dailyDF.csv")
 db_client.close()
 
 ## if there is no MongoDB for the data, load the dataframe from csv
-# df_daily = pd.read_csv("dailyDF.csv", index_col="date")
+# df_daily = pd.read_csv("./twc/dailyDF.csv", index_col="date")
 # df_daily.index = pd.to_datetime(df_daily.index)
 pprint.pprint(df_daily)
 ax = df_daily[["Original","Corrected","7d Rolling"]].plot(stacked=False)

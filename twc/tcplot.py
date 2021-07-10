@@ -9,7 +9,7 @@ def plot_confirm_case (df):
     return fig
 
 def plot_death_case (df):
-    fig = px.line(df, y=['Death'])
+    fig = px.line(df, y=['dead'])
     return fig
 
 def plot_df (df, labels=[]):

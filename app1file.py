@@ -87,7 +87,8 @@ def refresh_data_update_model_chart (n_clicks, options):
         msg = 'OK, Data Refreshed, click {} times'.format(n_clicks)
     else:
         msg = ''
-    df = tcdata.get_twcovid_df_from_db()
+    df = tcdata.get_twcovid_df(from_DB = True, db_str="mongodb://localhost:27017")
+#    df = tcdata.get_twcovid_df(from_DB = False)
     data = format_df(df)
     series = df['7d Rolling']
     model_fit = tcmodel.fit_ARIMA_model(series)

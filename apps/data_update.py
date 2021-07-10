@@ -1,6 +1,7 @@
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_table
+import config
 from dash.dependencies import Input, Output
 from twc import tcdata
 from app import app
@@ -38,7 +39,7 @@ layout = html.Div(children=[
     html.Br(),
     dcc.Link('Go to Daily Chart', href='/apps/daily_chart'),
     html.Br(),
-    dcc.Link('Go to Data Page', href='/apps/data_update')
+    dcc.Link('Go to Model Prediction', href='/apps/model_pred')
 ])
 
 @app.callback( 
@@ -47,11 +48,14 @@ layout = html.Div(children=[
     [Input("data-refresh", "n_clicks")]
     )
 def refresh_data_update_model_chart (n_clicks):
-    if (n_clicks != 0): 
-        tcdata.refresh_data_from_json(dir="./data/")
-        msg = 'OK, Data Refreshed, click {} times'.format(n_clicks)
+    if (n_clicks != 0):
+        if (config.use_DB == True): 
+            tcdata.refresh_data_from_json(dir=config.data_dir)
+            msg = 'OK, Data refreshed from json to MongoDB, click {} times'.format(n_clicks)
+        else:
+            msg = 'Use DB is {}. Load internal data'.format(config.use_DB)
     else:
         msg = ''
-    df = tcdata.get_twcovid_df_from_db()
+    df = tcdata.get_twcovid_df(from_DB=config.use_DB, db_str=config.db_str)
     data = format_df(df)
     return msg, data

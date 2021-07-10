@@ -1,9 +1,9 @@
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
-from twc import tcdata, tcplot, tcmodel
-
+from twc import tcdata, tcplot
 from app import app
+import config
 
 columns = ['Original','Corrected','7d Rolling','dead']
 
@@ -25,9 +25,9 @@ layout = html.Div (children=[
         style={'width': '78%', 'display': 'inline-block'}
     ),
     html.Br(),
-    dcc.Link('Go to Model Chart', href='/apps/model_pred'),
+    dcc.Link('Go to Model Predction', href='/apps/model_pred'),
     html.Br(),
-    dcc.Link('Go to Data Page', href='/apps/data_update')
+    dcc.Link('Go to Data Update', href='/apps/data_update')
 ])
 
 
@@ -35,6 +35,6 @@ layout = html.Div (children=[
     Output("line-chart", "figure"), 
     [Input("checklist", "value")])
 def display_value(options):
-    df = tcdata.get_twcovid_df_from_db()
+    df = tcdata.get_twcovid_df(from_DB=config.use_DB, db_str=config.db_str)
     fig = tcplot.plot_df(df, options)   
     return fig
