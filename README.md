@@ -31,7 +31,7 @@ A simple ARIMA model got fit to the "7 Days Rolloing Avg" of the corrected daily
 Example, model validation and forecast
 ![sum chart](./png/sumChart.png) 
 
-[6/24/2021] Two additional containers were used to execute the code quality scan
+**[6/24/2021] Two additional containers were used to execute the code quality scan**
 ```
 $ docker run -d --name sonarqube \
      -e SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true \
@@ -46,7 +46,7 @@ $ docker run --rm --name sonarscanner \
 ```
 After the installation and start of sonarqube server, follow the instruction to create twcovid project and login credential. Update the SONAR_LOGIN credential and edit the content of sonar-project.properties if needed. Start the sonar-scanner container to execute the code quality scan. Access the report on sonarqube server under project twcovid.
 
-[7/8/2021] Use plotly Dash opensource package to create a Web App. 
+**[7/8/2021] Use plotly Dash opensource package to create a Web App.** 
 
 The entry point of the Web App is index.py, i.e. run "python index.py" to start the app. Actual app python files are in the "apps" folder. The config.py stores the gloabl parameter for the application and default to
 ```
