@@ -48,7 +48,7 @@ After the installation and start of sonarqube server, follow the instruction to 
 
 [7/8/2021] Use plotly Dash opensource package to create a Web App. 
 
-The entry point of the Web App is index.py, i.e. run "python index.py" to start the app. Actual app python files is in the "apps" folder. The config.py stores the gloabl parameter for the application and default to
+The entry point of the Web App is index.py, i.e. run "python index.py" to start the app. Actual app python files are in the "apps" folder. The config.py stores the gloabl parameter for the application and default to
 ```
 use_DB = True
 db_str = "mongodb://localhost:27017"
