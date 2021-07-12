@@ -32,20 +32,30 @@ Example, model validation and forecast
 ![sum chart](./png/sumChart.png) 
 
 [6/24/2021] Two additional containers were used to execute the code quality scan
-1. $ docker run -d --name sonarqube \
+```
+$ docker run -d --name sonarqube \
      -e SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true \
      -p 9000:9000 \
      sonarqube:latest
-2. $ docker run --rm --name sonarscanner \
+
+$ docker run --rm --name sonarscanner \
     -e SONAR_HOST_URL="http://host.docker.internal:9000" \
     -e SONAR_LOGIN="e4ce107282f15903f65d02a889a8d31c1e73f7a8" \
     -v "$(pwd)":/usr/src \
     sonarsource/sonar-scanner-cli
-
+```
 After the installation and start of sonarqube server, follow the instruction to create twcovid project and login credential. Update the SONAR_LOGIN credential and edit the content of sonar-project.properties if needed. Start the sonar-scanner container to execute the code quality scan. Access the report on sonarqube server under project twcovid.
 
 [7/8/2021] Use plotly Dash opensource package to create a Web App. 
 
-The app.py and index.py was added as the entry point of the Web App. Python codes were also packaged under "twc" module and split into three function files, i.e. tcdata, tcmodel, and tcplot. This is a more production like coding style.
+The entry point of the Web App is index.py, i.e. run "python index.py" to start the app. Actual app python files is in the "apps" folder. The config.py stores the gloabl parameter for the application and default to
+```
+use_DB = True
+db_str = "mongodb://localhost:27017"
+data_dir = './data/'
+```
+When `use_DB` is True, the connection string to mongoDB need to be provided. Data refresh from json files in the `data_dir` will work in this mode. When `use_DB` is False, example data is loaded from dailyDF.csv. Cannot refresh data. 
+
+Python codes were also packaged under "twc" module and split into three function files, i.e. tcdata, tcmodel, and tcplot. This is a more production like coding style. 
 
 Webapp url: http://127.0.0.1:8050/ or http://localhost:8050/
