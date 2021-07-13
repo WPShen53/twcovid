@@ -1,11 +1,8 @@
 {
     "python.defaultInterpreterPath": "/usr/local/bin",
-    "python.linting.pylintPath": "/usr/local/bin/pylint",
     "python.analysis.extraPaths": [
         "/usr/local/bin",
         "/usr/local/lib/python3.9/site-packages",
         "/workspace"
-    ],
-    "python.linting.pylintEnabled": false,
-    "python.linting.enabled": true
+    ]
 }

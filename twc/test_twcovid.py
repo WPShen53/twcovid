@@ -1,4 +1,4 @@
-from twc import tcdata, tcplot, tcmodel
+import tcdata, tcplot, tcmodel
 import pprint
 
 # tcdata.refresh_data_from_json(dir = './data/')
@@ -17,4 +17,4 @@ model_fit = tcmodel.fit_ARIMA_model(series)
 print(model_fit.summary())
 
 fig = tcplot.plot_model_prediction(series, model_fit)
-fig.show()
+fig.show() 
