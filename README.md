@@ -50,11 +50,11 @@ After the installation and start of sonarqube server, follow the instruction to 
 
 The entry point of the Web App is index.py, i.e. run "python index.py" to start the app. Actual app python files are in the "apps" folder. The config.py stores the gloabl parameter for the application and default to
 ```
-use_DB = True
+use_db = True
 db_str = "mongodb://localhost:27017"
 data_dir = './data/'
 ```
-When `use_DB` is True, the connection string to mongoDB need to be provided. Data refresh from json files in the `data_dir` will work in this mode. When `use_DB` is False, example data is loaded from dailyDF.csv. Cannot refresh data. 
+When `use_db` is True, the connection string to mongoDB need to be provided. Data refresh from json files in the `data_dir` will work in this mode. When `use_db` is False, example data is loaded from dailyDF.csv. Cannot refresh data. 
 
 Python codes were also packaged under "twc" module and split into three function files, i.e. tcdata, tcmodel, and tcplot. This is a more production like coding style. 
 
