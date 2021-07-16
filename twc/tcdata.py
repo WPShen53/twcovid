@@ -14,9 +14,9 @@ def refresh_data_from_json(dir = '../data/', db_str=''):
     if db_str=='':
         print('Did not provide MongoDB connection str. Use defaul "mongodb://localhost:27017"')
         db_str = 'mongodb://localhost:27017'
-    docs = __get_docs(db_str)
-    docs.delete_many({})
     try: 
+        docs = __get_docs(db_str)
+        docs.delete_many({})
         for filename in os.listdir(dir):
             with open(dir+filename) as f: file_data = json.load(f)
             if isinstance(file_data, dict): 
