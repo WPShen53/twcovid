@@ -12,7 +12,7 @@ def __get_docs(db_str):
 
 def refresh_data_from_json(dir = '../data/', db_str=''):
     if db_str=='':
-        print('Did no provide MongoDB connection str. Use defaul "mongodb://localhost:27017"')
+        print('Did not provide MongoDB connection str. Use defaul "mongodb://localhost:27017"')
         db_str = 'mongodb://localhost:27017'
     docs = __get_docs(db_str)
     docs.delete_many({})
