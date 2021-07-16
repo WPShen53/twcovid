@@ -4,7 +4,7 @@ from twc import tcdata, tcmodel, tcplot
 from app import app
 import config
 
-df = tcdata.get_twcovid_df(from_DB=config.use_DB, db_str=config.db_str)
+df = tcdata.get_twcovid_df(from_db=config.use_db, db_str=config.db_str)
 series = df['7d Rolling']
 model_fit = tcmodel.fit_ARIMA_model(series)
 fig = tcplot.plot_model_prediction(series, model_fit) 

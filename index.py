@@ -2,8 +2,6 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
 from app import app
-
-# from app import app
 from apps import daily_chart, model_pred, data_update
 
 app.layout = html.Div([

@@ -1,7 +1,7 @@
 import pymongo
-import os
 import pkg_resources
 import json
+import os
 import pandas as pd
 
 def __get_docs(db_str):
@@ -23,17 +23,19 @@ def refresh_data_from_json(dir = '../data/', db_str=''):
                 docs.insert_one(file_data)
             else : 
                 docs.insert_many(file_data)
-    except:
-        print("fail to insert data from json file")
+    except Exception as err:
+        print("fail to insert data from json file. {}".format(err))
 
-def get_twcovid_df (from_DB = True, db_str="mongodb://localhost:27017"):
-    if from_DB == False:
+def get_twcovid_df (from_db = True, db_str="mongodb://localhost:27017"):
+    if from_db == False:
         df = load_twcovid()
     else:
         try:
             df = get_twcovid_df_from_db(db_str)
-        except:
-            print ('Unable to connect to db {}').format(db_str)
+        except Exception as err:
+            print ('Unable to connect to db {}'.format(err))
+            print ('=== Get dataframe from csv ===')
+            df = load_twcovid()
     return df
 
 def get_twcovid_df_from_db(db_str):
@@ -62,7 +64,6 @@ def get_twcovid_df_from_db(db_str):
     df_death.index = pd.to_datetime(df_death.index)
     df_death.rename(columns={0:"dead"}, inplace=True)
     df["dead"] = df_death
- 
     return df
 
 def load_twcovid():

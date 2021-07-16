@@ -1,9 +1,10 @@
-import tcdata, tcplot, tcmodel
+from twc import tcdata, tcplot, tcmodel
+import config
 import pprint
 
-# tcdata.refresh_data_from_json(dir = './data/')
-# df = tcdata.get_twcovid_df(from_DB = True, db_str="mongodb://localhost:27017")
-df = tcdata.get_twcovid_df(from_DB = False)
+if (config.use_db == True):
+    tcdata.refresh_data_from_json(dir=config.data_dir)
+df = tcdata.get_twcovid_df(from_db=config.use_db, db_str=config.db_str)
 pprint.pprint(df)
 
 fig = tcplot.plot_confirm_case(df)

@@ -49,13 +49,13 @@ layout = html.Div(children=[
     )
 def refresh_data_update_model_chart (n_clicks):
     if (n_clicks != 0):
-        if (config.use_DB == True): 
+        if (config.use_db == True): 
             tcdata.refresh_data_from_json(dir=config.data_dir)
             msg = 'OK, Data refreshed from json to MongoDB, click {} times'.format(n_clicks)
         else:
-            msg = 'Use DB is {}. Load internal data'.format(config.use_DB)
+            msg = 'Use DB is {}. Load internal data'.format(config.use_db)
     else:
         msg = ''
-    df = tcdata.get_twcovid_df(from_DB=config.use_DB, db_str=config.db_str)
+    df = tcdata.get_twcovid_df(from_db=config.use_db, db_str=config.db_str)
     data = format_df(df)
     return msg, data

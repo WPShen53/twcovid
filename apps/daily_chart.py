@@ -35,6 +35,6 @@ layout = html.Div (children=[
     Output("line-chart", "figure"), 
     [Input("checklist", "value")])
 def display_value(options):
-    df = tcdata.get_twcovid_df(from_DB=config.use_DB, db_str=config.db_str)
+    df = tcdata.get_twcovid_df(from_db=config.use_db, db_str=config.db_str)
     fig = tcplot.plot_df(df, options)   
     return fig
